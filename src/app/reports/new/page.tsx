@@ -46,7 +46,8 @@ export default function ReportPage() {
       <div className="mb-8">
         <h1 className="text-3xl font-bold tracking-tight mb-2">Report an Experience</h1>
         <p className="text-slate-600 dark:text-slate-400">
-          Help build a fair pricing database. Submit a report with a photo of a bill or meter if you have one.
+          Your reports are fed directly into our <strong>Location-based Tourist Trap Database</strong>. 
+          By reporting overcharging, you help our AI identify scam hotspots and protect future travellers.
         </p>
       </div>
 

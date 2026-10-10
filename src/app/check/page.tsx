@@ -9,6 +9,7 @@ import {
 } from "lucide-react";
 import type { LatLng } from "leaflet";
 import LocationSearch from "@/components/LocationSearch";
+import { SCAM_HOTSPOTS } from "@/lib/hotspots";
 
 const Map = dynamic(() => import("@/components/Map"), { ssr: false });
 
@@ -258,7 +259,7 @@ export default function CheckPage() {
         {/* ── Right: Full-screen map ── */}
         <div className="flex-1 relative w-full h-full bg-slate-900 z-0">
           <div className="absolute inset-0">
-            <Map pickup={pickup} drop={drop} setPickup={onMapPickup} setDrop={onMapDrop} />
+            <Map pickup={pickup} drop={drop} setPickup={onMapPickup} setDrop={onMapDrop} hotspots={SCAM_HOTSPOTS} />
           </div>
 
           {/* Map overlay instructions */}

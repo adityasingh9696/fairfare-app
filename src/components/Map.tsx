@@ -1,6 +1,6 @@
 "use client";
 import { useEffect } from "react";
-import { MapContainer, TileLayer, Marker, Popup, Polyline, useMapEvents, useMap } from "react-leaflet";
+import { MapContainer, TileLayer, Marker, Popup, Polyline, useMapEvents, useMap, Circle } from "react-leaflet";
 import L from "leaflet";
 import "leaflet/dist/leaflet.css";
 
@@ -40,6 +40,7 @@ interface Props {
   drop:   L.LatLng | null;
   setPickup: (l: L.LatLng | null) => void;
   setDrop:   (l: L.LatLng | null) => void;
+  hotspots?: {lat: number; lng: number; radius: number; name: string; complaints: number}[];
 }
 
 function Clicker({ pickup, setPickup, setDrop }: { pickup: L.LatLng | null; setPickup: (l: L.LatLng) => void; setDrop: (l: L.LatLng) => void }) {
@@ -67,7 +68,7 @@ function PanToPins({ pickup, drop }: { pickup: L.LatLng | null; drop: L.LatLng |
   return null;
 }
 
-export default function Map({ pickup, drop, setPickup, setDrop }: Props) {
+export default function Map({ pickup, drop, setPickup, setDrop, hotspots = [] }: Props) {
   return (
     <MapContainer
       center={[26.1445, 91.7362]}
@@ -128,6 +129,24 @@ export default function Map({ pickup, drop, setPickup, setDrop }: Props) {
           }}
         />
       )}
+
+      {/* Scam Hotspots (Danger Zones) */}
+      {hotspots.map((h, i) => (
+        <Circle
+          key={i}
+          center={[h.lat, h.lng]}
+          radius={h.radius}
+          pathOptions={{ color: "#ef4444", fillColor: "#ef4444", fillOpacity: 0.2, weight: 1 }}
+        >
+          <Popup className="dark-popup">
+            <div style={{color:"#ef4444",fontWeight:700,fontSize:"13px"}}>🚨 Scam Hotspot</div>
+            <div style={{color:"#f8fafc",fontSize:"12px",marginTop:4, fontWeight:600}}>{h.name}</div>
+            <div style={{color:"#94a3b8",fontSize:"11px",marginTop:2}}>
+              {h.complaints} reported incidents of overcharging.
+            </div>
+          </Popup>
+        </Circle>
+      ))}
     </MapContainer>
   );
 }
