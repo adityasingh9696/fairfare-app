@@ -59,7 +59,7 @@ export default function LoginPage() {
         <div className="relative z-20">
           <div className="badge-indigo inline-flex items-center gap-2 px-3 py-1.5 rounded-full text-xs font-semibold uppercase tracking-wider mb-6">
             <span className="w-1.5 h-1.5 rounded-full bg-indigo-400 inline-block animate-pulse" />
-            AI-Powered · Guwahati · 2026
+            AI-Powered · Global · 2026
           </div>
           <h2 className="font-display font-black text-4xl xl:text-5xl text-white leading-tight mb-4">
             Don't get trapped<br/>
@@ -68,7 +68,7 @@ export default function LoginPage() {
             </span>
           </h2>
           <p className="text-slate-300 text-lg mb-10 max-w-md">
-            Real-time price verification using official tariffs and verified community reports from Guwahati travellers.
+            Real-time price verification using official tariffs and verified community reports from global travellers.
           </p>
 
           <div className="space-y-4">
