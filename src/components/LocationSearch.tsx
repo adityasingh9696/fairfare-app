@@ -23,7 +23,7 @@ export default function LocationSearch({ label, color, value, cityContext, onCha
   const [suggestions, setSugs]      = useState<Suggestion[]>([]);
   const [loading, setLoading]       = useState(false);
   const [open, setOpen]             = useState(false);
-  const debounceRef                 = useRef<ReturnType<typeof setTimeout>>();
+  const debounceRef                 = useRef<NodeJS.Timeout | undefined>(undefined);
   const wrapRef                     = useRef<HTMLDivElement>(null);
 
   // Sync external value changes (like when clicking the map)
