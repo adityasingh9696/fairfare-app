@@ -1,6 +1,6 @@
 "use client";
 import { useEffect } from "react";
-import { MapContainer, TileLayer, Marker, Popup, Polyline, useMapEvents } from "react-leaflet";
+import { MapContainer, TileLayer, Marker, Popup, Polyline, useMapEvents, useMap } from "react-leaflet";
 import L from "leaflet";
 import "leaflet/dist/leaflet.css";
 
@@ -52,6 +52,21 @@ function Clicker({ pickup, setPickup, setDrop }: { pickup: L.LatLng | null; setP
   return null;
 }
 
+function PanToPins({ pickup, drop }: { pickup: L.LatLng | null; drop: L.LatLng | null }) {
+  const map = useMap();
+  useEffect(() => {
+    if (pickup && drop) {
+      const bounds = L.latLngBounds([pickup, drop]);
+      map.fitBounds(bounds, { padding: [50, 50] });
+    } else if (pickup) {
+      map.flyTo(pickup, 14, { duration: 1.5 });
+    } else if (drop) {
+      map.flyTo(drop, 14, { duration: 1.5 });
+    }
+  }, [pickup, drop, map]);
+  return null;
+}
+
 export default function Map({ pickup, drop, setPickup, setDrop }: Props) {
   return (
     <MapContainer
@@ -69,6 +84,7 @@ export default function Map({ pickup, drop, setPickup, setDrop }: Props) {
       />
 
       <Clicker pickup={pickup} setPickup={setPickup} setDrop={setDrop} />
+      <PanToPins pickup={pickup} drop={drop} />
 
       {pickup && (
         <Marker position={pickup} icon={pickupIcon}>

@@ -123,11 +123,13 @@ export default function CheckPage() {
             <div className="grid grid-cols-2 gap-3">
               <div>
                 <label className="block text-xs font-semibold text-slate-500 uppercase tracking-wider mb-2">City</label>
-                <select value={city} onChange={e => setCity(e.target.value)} className="inp">
-                  <option value="Guwahati">Guwahati</option>
-                  <option value="Shillong">Shillong</option>
-                  <option value="Dibrugarh">Dibrugarh</option>
-                </select>
+                <input 
+                  type="text" 
+                  value={city} 
+                  onChange={e => setCity(e.target.value)} 
+                  placeholder="e.g. Mumbai"
+                  className="inp"
+                />
               </div>
               <div>
                 <label className="block text-xs font-semibold text-slate-500 uppercase tracking-wider mb-2">Service</label>

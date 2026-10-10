@@ -45,13 +45,8 @@ export default function LocationSearch({ label, color, value, cityContext, onCha
     setLoading(true);
     try {
       // Use Photon API (Komoot) which has much better fuzzy autocomplete than raw Nominatim
-      // Bias location based on the selected city (rough coordinates)
-      let lat = 26.1445, lon = 91.7362; // Default Guwahati
-      if (cityContext === "Shillong") { lat = 25.5788; lon = 91.8933; }
-      if (cityContext === "Dibrugarh") { lat = 27.4728; lon = 94.9120; }
-
-      // Append city to query to help restrict results, but rely heavily on lat/lon bias
-      const url = `https://photon.komoot.io/api/?q=${encodeURIComponent(q + " " + cityContext)}&lat=${lat}&lon=${lon}&limit=8`;
+      // Append city to query to help restrict results. Photon handles global queries well.
+      const url = `https://photon.komoot.io/api/?q=${encodeURIComponent(q + " " + cityContext)}&limit=8`;
       const res = await fetch(url);
       const data = await res.json();
       
