@@ -14,11 +14,12 @@ interface LocationSearchProps {
   color: "indigo" | "purple";
   value: string;
   cityContext: string;
+  type?: "city" | "default";
   onChange: (name: string, latlng: { lat: number; lng: number } | null) => void;
   placeholder?: string;
 }
 
-export default function LocationSearch({ label, color, value, cityContext, onChange, placeholder }: LocationSearchProps) {
+export default function LocationSearch({ label, color, value, cityContext, type = "default", onChange, placeholder }: LocationSearchProps) {
   const [query, setQuery]           = useState(value || "");
   const [suggestions, setSugs]      = useState<Suggestion[]>([]);
   const [loading, setLoading]       = useState(false);
@@ -46,7 +47,10 @@ export default function LocationSearch({ label, color, value, cityContext, onCha
     try {
       // Use Photon API (Komoot) which has much better fuzzy autocomplete than raw Nominatim
       // Append city to query to help restrict results. Photon handles global queries well.
-      const url = `https://photon.komoot.io/api/?q=${encodeURIComponent(q + " " + cityContext)}&limit=8`;
+      let url = `https://photon.komoot.io/api/?q=${encodeURIComponent(q + " " + cityContext)}&limit=8`;
+      if (type === "city") {
+        url = `https://photon.komoot.io/api/?q=${encodeURIComponent(q)}&osm_tag=place:city&osm_tag=place:town&limit=8`;
+      }
       const res = await fetch(url);
       const data = await res.json();
       
@@ -115,7 +119,7 @@ export default function LocationSearch({ label, color, value, cityContext, onCha
           value={query}
           onChange={e => handleInput(e.target.value)}
           onFocus={() => suggestions.length > 0 && setOpen(true)}
-          placeholder={placeholder || `Type a place in ${cityContext}...`}
+          placeholder={placeholder || (type === "city" ? "Type a city name..." : `Type a place in ${cityContext}...`)}
           className="inp pl-9 pr-8"
           style={{ fontSize: "0.875rem" }}
         />

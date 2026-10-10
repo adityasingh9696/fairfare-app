@@ -23,6 +23,7 @@ export default function CheckPage() {
   const { role } = useAuth();
   const router   = useRouter();
   const [city, setCity]             = useState("Guwahati");
+  const [cityLatLng, setCityLatLng] = useState<LatLng | null>(null);
   const [service, setService]       = useState("auto");
   const [price, setPrice]           = useState("");
   const [pickup, setPickup]         = useState<LatLng | null>(null);
@@ -121,18 +122,22 @@ export default function CheckPage() {
 
           <form onSubmit={check} className="flex flex-col gap-6 p-6 shrink-0">
             {/* City + Service */}
-            <div className="grid grid-cols-2 gap-3">
-              <div>
-                <label className="block text-xs font-semibold text-slate-500 uppercase tracking-wider mb-2">City</label>
-                <input 
-                  type="text" 
+            <div className="grid grid-cols-2 gap-3 relative z-30">
+              <div className="relative">
+                <LocationSearch 
+                  label="City" 
+                  color="indigo" 
+                  type="city"
                   value={city} 
-                  onChange={e => setCity(e.target.value)} 
-                  placeholder="e.g. Mumbai"
-                  className="inp"
+                  cityContext=""
+                  onChange={(name, latlng) => {
+                    setCity(name);
+                    if (latlng) setCityLatLng(latlng as LatLng);
+                  }} 
+                  placeholder="e.g. Mumbai" 
                 />
               </div>
-              <div>
+              <div className="relative">
                 <label className="block text-xs font-semibold text-slate-500 uppercase tracking-wider mb-2">Service</label>
                 <select value={service} onChange={e => setService(e.target.value)} className="inp">
                   <option value="auto">Auto-rickshaw</option>
@@ -259,7 +264,7 @@ export default function CheckPage() {
         {/* ── Right: Full-screen map ── */}
         <div className="flex-1 relative w-full h-full bg-slate-900 z-0">
           <div className="absolute inset-0">
-            <Map pickup={pickup} drop={drop} setPickup={onMapPickup} setDrop={onMapDrop} hotspots={SCAM_HOTSPOTS} />
+            <Map pickup={pickup} drop={drop} setPickup={onMapPickup} setDrop={onMapDrop} hotspots={SCAM_HOTSPOTS} cityLatLng={cityLatLng} />
           </div>
 
           {/* Map overlay instructions */}

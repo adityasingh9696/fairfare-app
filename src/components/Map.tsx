@@ -41,6 +41,7 @@ interface Props {
   setPickup: (l: L.LatLng | null) => void;
   setDrop:   (l: L.LatLng | null) => void;
   hotspots?: {lat: number; lng: number; radius: number; name: string; complaints: number}[];
+  cityLatLng?: L.LatLng | null;
 }
 
 function Clicker({ pickup, setPickup, setDrop }: { pickup: L.LatLng | null; setPickup: (l: L.LatLng) => void; setDrop: (l: L.LatLng) => void }) {
@@ -53,7 +54,7 @@ function Clicker({ pickup, setPickup, setDrop }: { pickup: L.LatLng | null; setP
   return null;
 }
 
-function PanToPins({ pickup, drop }: { pickup: L.LatLng | null; drop: L.LatLng | null }) {
+function PanToPins({ pickup, drop, cityLatLng }: { pickup: L.LatLng | null; drop: L.LatLng | null; cityLatLng?: L.LatLng | null }) {
   const map = useMap();
   useEffect(() => {
     if (pickup && drop) {
@@ -63,12 +64,14 @@ function PanToPins({ pickup, drop }: { pickup: L.LatLng | null; drop: L.LatLng |
       map.flyTo(pickup, 14, { duration: 1.5 });
     } else if (drop) {
       map.flyTo(drop, 14, { duration: 1.5 });
+    } else if (cityLatLng && !pickup && !drop) {
+      map.flyTo(cityLatLng, 12, { duration: 1.5 });
     }
-  }, [pickup, drop, map]);
+  }, [pickup, drop, cityLatLng, map]);
   return null;
 }
 
-export default function Map({ pickup, drop, setPickup, setDrop, hotspots = [] }: Props) {
+export default function Map({ pickup, drop, setPickup, setDrop, hotspots = [], cityLatLng = null }: Props) {
   return (
     <MapContainer
       center={[26.1445, 91.7362]}
@@ -85,7 +88,7 @@ export default function Map({ pickup, drop, setPickup, setDrop, hotspots = [] }:
       />
 
       <Clicker pickup={pickup} setPickup={setPickup} setDrop={setDrop} />
-      <PanToPins pickup={pickup} drop={drop} />
+      <PanToPins pickup={pickup} drop={drop} cityLatLng={cityLatLng} />
 
       {pickup && (
         <Marker position={pickup} icon={pickupIcon}>
